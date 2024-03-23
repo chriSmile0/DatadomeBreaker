@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "mouse-helper": "^1.0.7",
+    "puppeteer": "^21.7.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  }
+}

@@ -95,6 +95,7 @@ void process_read_home() {
 	int ecart = -1; 
 	int debut_column = 2; // cut white band
 	int debut_row = 2; 	// cut white band
+	int orange_row = -1;
 	//bool end = false; stop the loop when the dst is find 
 	for(int y = debut_row; y < height ; y++) {
 		png_bytep row = row_pointers[y];
@@ -114,11 +115,12 @@ void process_read_home() {
 				if((cpt_o > 20) && (!valid_line)) {
 					valid_line = true;
 					dep = x - cpt_o - 10;
+					orange_row = x;
 				}
 			}
 			else if(more_precise_is_gray(px[0],px[1],px[2]) && !is_orange(px[0],px[1],px[2])) {
 				printf("o");
-				if(cpt_o > 20 && (cpt_g == 20)) {
+				if(((cpt_o > 20) || (orange_row + 5 < x)) && (cpt_g == 20)) {
 					if(ecart == -1) {
 						ecart = x - 21 - dep;
 						//end = true;
