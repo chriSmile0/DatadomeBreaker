@@ -1,6 +1,5 @@
 #include "libpng_example.h"
 #include "print_png.h"
-#include "colors.h"
 
 void print_png(char *filename) {
 	read_png_file(filename);

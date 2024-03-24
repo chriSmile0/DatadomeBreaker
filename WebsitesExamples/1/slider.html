@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+	/*.slidecontainer {
+		width: 100%;
+	}
+	
+	.slider {
+		-webkit-appearance: none;
+		width: 100%;
+		height: 25px;
+		background: #d3d3d3;
+		outline: none;
+		opacity: 0.7;
+		-webkit-transition: .2s;
+		transition: opacity .2s;
+	}
+	
+	.slider:hover {
+		opacity: 1;
+	}
+	
+	.slider::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		appearance: none;
+		width: 25px;
+		height: 25px;
+		background: #04AA6D;
+		cursor: pointer;
+	}
+	
+	.slider::-moz-range-thumb {
+		width: 25px;
+		height: 25px;
+		background: #04AA6D;
+		cursor: pointer;
+	}*/
+
+	article {
+		display:flex;
+		flex-direction: column;
+	}
+
+	#container_pieces {
+		display:block;
+		text-align: center;
+		height:400px;
+		width:100%;
+		/*background-image: url("imgs/butterfly.png");*/
+	}
+
+	#captcha__puzzle {
+		position:absolute;
+		left:100px;
+		width:280px;
+		height:155px;
+	}
+
+	#piece_to_move {
+		font-size:16px;
+		position:absolute;
+		top:200px;
+		left:100px;
+		right:50px;
+		width:50px;
+		height:20px;
+		border:solid;
+	}
+
+	#res {
+		font-size:18px;
+		position:absolute;
+		top:200px;
+		left:250px;
+		width:50px;
+		height:20px;
+		border:solid;
+	}
+
+	#container {
+		display:block;
+		width:100%;height:50px;background-color:yellow;border:solid;
+	}
+
+	.slider {
+		width:30px;
+		position: absolute;
+		left:100px;
+		right:50px;
+		width: 50px;
+		border:solid;
+		text-align:center;
+	}
+	</style>
+</head>
+<body id="body_">
+	<!--<h1>Custom Range Slider</h1>
+
+	<div class="slidecontainer">
+		<p>Default range slider:</p>
+		<input type="range" min="1" max="100" value="50">
+	
+		<p>Custom range slider:</p>
+		<input type="range" min="1" max="100" value="50" class="slider" id="captcha__puzzle_button">
+	</div>-->
+	<article>
+		<div id="container_pieces">
+			<img id="captcha__puzzle" class="toggled" src="imgs/butterfly.png"></img>
+			<div id="piece_to_move">x</div>
+			<div id="res">O</div>
+		</div>
+		<div id="container">
+			<div class="slider"><i>S</i></div>
+		</div>
+	</article>
+
+	
+
+	<script>
+		function mouseDown(e) { // OK 
+			document.getElementById('container').style.backgroundColor = "blue";
+			document.getElementsByClassName("slider")[0].addEventListener('mousemove',mouseRight);
+		}
+
+		function mouseUp(e) {  // OK
+			const val_s = document.getElementsByClassName("slider")[0].style.left;
+			const val_t = document.getElementById('res').style.left;
+			const val_s_int = parseInt(val_s.substring(0,val_s.indexOf("px")));
+			const val_t_int = parseInt(val_t.substring(0,val_t.indexOf("px")));
+			if((val_s_int >  val_t_int-6) && (val_s_int < val_t_int+6 )) {
+				document.getElementById('container').style.backgroundColor = "green";
+			}
+			else 
+				document.getElementById('container').style.backgroundColor = "red";
+			document.getElementsByClassName("slider")[0].removeEventListener('mousemove',mouseRight);
+		}
+
+		function mouseRight(e) {
+			const val_s = document.getElementsByClassName("slider")[0].style.left;
+			if(e.clientX+"px" !== val_s) {
+				document.getElementsByClassName("slider")[0].style.left = (e.clientX-30)+"px";
+				document.getElementsByClassName("slider")[0].style.right = (e.clientX)+"px";
+				document.getElementById('piece_to_move').style.left = (e.clientX-30)+"px";
+				document.getElementById('piece_to_move').style.right = (e.clientX)+"px";
+			}
+			return e;
+			
+		}
+		document.getElementsByClassName("slider")[0].onmousedown = function(e){mouseDown(e);};
+		document.getElementsByClassName("slider")[0].onmouseup = function(e){mouseUp(e);};
+		document.getElementsByClassName("slider")[0].onmouseleave = function(e){mouseUp(e);};
+		document.getElementById('res').style.left = "230px";
+	</script>
+</body>
+</html>
