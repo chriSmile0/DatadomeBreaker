@@ -40,7 +40,7 @@ async function loadedBrk(page,url,canva_path,slider_path,name_canva_file, name_o
   const iframeElement = await page.$('iframe');
   var slider = "";
   if(iframeElement === null) { // - NO IFRAME 
-    await page.screenshot({path: 'screen_deps/start.png'});
+    await page.screenshot({path: __dirname+'/screen_deps/start.png'});
     await page.waitForTimeout(2000);
     await page.waitForSelector(canva_path);         
     const canva = await page.$(canva_path);    
@@ -199,7 +199,7 @@ async function execBRK2(url,waitedtime) {
                               width:800,
                               height:700
                             }*/});
-	var ls_size = parseInt(execSync("ls -l "+dirname+"/canvas_lib | wc -l").toString());
+	var ls_size = parseInt(execSync("ls -l "+__dirname+"/canvas_lib | wc -l").toString());
 	const file = ""+ls_size+".png";
 	const page = await browser.newPage();
 	loadedBrk(page,url,'#captcha__puzzle','.slider',file,"screen_"+file);
@@ -251,14 +251,14 @@ function main(argc,argv) {
 				else 
 					execHelp();
 				break;
-      case "-el": {
-        if(argv[3])
-          if(argv[4])
-					  execBRK2(argv[3],argv[4]);
+			case "-el": 
+				if(argv[3])
+					if(argv[4])
+						execBRK2(argv[3],argv[4]);
+				
 				else 
 					execHelp();
 				break;
-      }
 			case "-c":
 				console.log("clean");
 				execClean();
