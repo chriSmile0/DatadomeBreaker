@@ -3,8 +3,11 @@ const puppeteer = require('puppeteer-extra');
 const { argv } = require('process');
 const {exec, execSync} = require("child_process");
 
-const StealthPlugin = require('puppeteer-extra-plugin-stealth')
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+const path = require('node:path'); 
+const { dirname } = require('path');
 puppeteer.use(StealthPlugin())
+
 
 
 /**
@@ -15,7 +18,7 @@ puppeteer.use(StealthPlugin())
  *                    bot detection page
 */
 function call_print_png(name_canva) {
-	var my_exec = "libpng_usage/print_png canvas_lib/"+name_canva;
+	var my_exec = "cd "+__dirname+ " &&  ./libpng_usage/print_png " + __dirname + "/canvas_lib/"+name_canva + "&& cd ..";
 	var r = execSync(my_exec).toString();
 	const rtn = r.substring(r.indexOf("= "));
 	const rt = parseFloat(rtn.substring(2,rtn.indexOf("px")));
@@ -41,17 +44,17 @@ async function loadedBrk(page,url,canva_path,slider_path,name_canva_file, name_o
     await page.waitForTimeout(2000);
     await page.waitForSelector(canva_path);         
     const canva = await page.$(canva_path);    
-    await canva.screenshot({path: 'canvas_lib/'+name_canva_file}); // take screenshot element in puppeteer
+    await canva.screenshot({path: __dirname+'/canvas_lib/'+name_canva_file}); // take screenshot element in puppeteer
     await page.waitForSelector(slider_path);         
     slider = await page.$(slider_path);       
   }
   else {
     const frame = await iframeElement.contentFrame();
-    await page.screenshot({path: 'screen_deps/start.png'});
+    await page.screenshot({path: __dirname+'/screen_deps/start.png'});
     await frame.waitForTimeout(2000);
     await frame.waitForSelector(canva_path);         
     const canva = await frame.$(canva_path);       
-    await canva.screenshot({path: 'canvas_lib/'+name_canva_file}); // take screenshot element in puppeteer
+    await canva.screenshot({path: __dirname+'/canvas_lib/'+name_canva_file}); // take screenshot element in puppeteer
     await frame.waitForSelector(slider_path);       
     slider = await frame.$(slider_path);   
   }
@@ -73,7 +76,7 @@ async function loadedBrk(page,url,canva_path,slider_path,name_canva_file, name_o
 	await page.waitForTimeout(100);
 	await page.mouse.up();
   await page.waitForTimeout(2000);
-  await page.screenshot({ path: 'outs/'+name_out_file, fullPage: true });
+  await page.screenshot({ path: __dirname+'/outs/'+name_out_file, fullPage: true });
 }
 
 /**
@@ -97,13 +100,13 @@ async function brk(url,canva_path,slider_path,name_canva_file, name_out_file) {
   // -- POSSIBLE UPDATE TO NOT BEGIN IN THE BEGIN OF SLIDER BUT IN THE BEGIN
   // -- OF THE PIECE TO MOVE (need C algorithm update!!)
   const browser = await puppeteer.launch({
-                            headless: true,
+                            headless: true/*,
                             ignoreHTTPSErrors: true,
                             args: [`--window-size=800,700`], // -- SEARCH IN OPTIONS FOR BYPASS DD SERVER SIDE CHECK
                             defaultViewport: {
                               width:800,
                               height:700
-                            }});
+                            }*/});
   const page = await browser.newPage();
   await page.goto(url);
   const url_ = await page.url();
@@ -111,21 +114,21 @@ async function brk(url,canva_path,slider_path,name_canva_file, name_out_file) {
   const iframeElement = await page.$('iframe');
   var slider = "";
   if(iframeElement === null) { // - NO IFRAME 
-    await page.screenshot({path: 'screen_deps/start.png'});
+    await page.screenshot({path: __dirname+'/screen_deps/start.png'});
     await page.waitForTimeout(2000);
     await page.waitForSelector(canva_path);         
     const canva = await page.$(canva_path);    
-    await canva.screenshot({path: 'canvas_lib/'+name_canva_file}); // take screenshot element in puppeteer
+    await canva.screenshot({path: __dirname+'/canvas_lib/'+name_canva_file}); // take screenshot element in puppeteer
     await page.waitForSelector(slider_path);         
     slider = await page.$(slider_path);       
   }
   else {
     const frame = await iframeElement.contentFrame();
-    await page.screenshot({path: 'screen_deps/start.png'});
+    await page.screenshot({path: __dirname+'/screen_deps/start.png'});
     await frame.waitForTimeout(2000);
     await frame.waitForSelector(canva_path);         
     const canva = await frame.$(canva_path);       
-    await canva.screenshot({path: 'canvas_lib/'+name_canva_file}); // take screenshot element in puppeteer
+    await canva.screenshot({path: __dirname+'/canvas_lib/'+name_canva_file}); // take screenshot element in puppeteer
     await frame.waitForSelector(slider_path);       
     slider = await frame.$(slider_path);   
   }
@@ -147,7 +150,7 @@ async function brk(url,canva_path,slider_path,name_canva_file, name_out_file) {
 	await page.waitForTimeout(100);
 	await page.mouse.up();
   await page.waitForTimeout(2000);
-  await page.screenshot({ path: 'outs/'+name_out_file, fullPage: true });
+  await page.screenshot({ path: __dirname+'/outs/'+name_out_file, fullPage: true });
   await browser.close();
 }
 
@@ -159,7 +162,7 @@ async function brk(url,canva_path,slider_path,name_canva_file, name_out_file) {
  * @param { string } the url 
 */
 function execBrk(argument) {
-	var ls_size = parseInt(execSync("ls -l canvas_lib | wc -l").toString());
+	var ls_size = parseInt(execSync("ls -l " +__dirname+"/canvas_lib | wc -l").toString());
 	const file = ""+ls_size+".png";
 	/*const path_to_file = "tests_htmls/sliders/slider.html";
 	const url = "http://localhost/"+path_to_file;*/
@@ -196,7 +199,7 @@ async function execBRK2(url,waitedtime) {
                               width:800,
                               height:700
                             }*/});
-	var ls_size = parseInt(execSync("ls -l canvas_lib | wc -l").toString());
+	var ls_size = parseInt(execSync("ls -l "+dirname+"/canvas_lib | wc -l").toString());
 	const file = ""+ls_size+".png";
 	const page = await browser.newPage();
 	loadedBrk(page,url,'#captcha__puzzle','.slider',file,"screen_"+file);
@@ -209,7 +212,7 @@ async function execBRK2(url,waitedtime) {
  * @brief  Clean the libs
 */
 function execClean() {
-  exec("rm canvas_lib/* && rm outs/*")
+  exec("rm "+__dirname+"/canvas_lib/* && rm "+__dirname+"/outs/*")
 }
 
 /**
@@ -226,7 +229,7 @@ function execLocally() {
 
 function execHelp() {
 	const rtn_e   = "\t\t -e  -> execDefaultBrk \t [ARGUMENT] : {http/https}://... \n";
-  const rtn_el  = "\t\t -el -> execBrkV2        [ARGUMENT] : {http/https}://... \n";
+  const rtn_el  = "\t\t -el -> execBrkV2        [ARGUMENT] : {http/https}://... [ARG2] : {0-n}\n";
 	const rtn_c   = "\t\t -c  -> cleanDirectories [ARGUMENT] : [NO_ARGUMENT]\n";
 	const rtn_l   = "\t\t -l  -> execYourCode     [ARGUMENT] : [NO ARGUMENT]";
 	console.log(rtn_e+rtn_el+rtn_c+rtn_l);
@@ -275,11 +278,15 @@ function main(argc,argv) {
 exports.brkHelp = function() {
 	execHelp();
 }
-exports.Main = function (argv) {
+exports.Main = function(argv) {
   main(argv.length,argv);
 }
 exports.loadedBrk = function(page,url,canva_path,slider_path,name_canva_file, name_out_file) {
   loadedBrk(page,url,canva_path,slider_path,name_canva_file, name_out_file);
+}
+
+exports.execCProg = function(name_canva) {
+  return call_print_png(name_canva);
 }
 
 const final_target = "https://www.coursesu.com/drive/home";  // IN iframe -> see test for the origin 

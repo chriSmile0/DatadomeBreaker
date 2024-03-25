@@ -1,4 +1,4 @@
-var break_js = require('./break');
+var break_js = require('../break');
 
 // -- ADD REQUIRE MODULE
 const { argv } = require('process');
@@ -9,5 +9,5 @@ puppeteer.use(StealthPlugin());
 // -- END ADD REQUIRE MODULE
 
 //break_js.brkHelp();
-console.log(break_js.execCProg("1.png"));
-//break_js.Main(argv);
+//console.log(break_js.execCProg("1.png"));
+break_js.Main(argv);
