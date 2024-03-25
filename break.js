@@ -189,13 +189,13 @@ async function execBRK2(url,waitedtime) {
 		return;
 	}
 	const browser = await puppeteer.launch({
-                            headless: true,
+                            headless: true/*,
                             ignoreHTTPSErrors: true,
                             args: [`--window-size=800,700`], // -- SEARCH IN OPTIONS FOR BYPASS DD SERVER SIDE CHECK
                             defaultViewport: {
                               width:800,
                               height:700
-                            }});
+                            }*/});
 	var ls_size = parseInt(execSync("ls -l canvas_lib | wc -l").toString());
 	const file = ""+ls_size+".png";
 	const page = await browser.newPage();
@@ -270,7 +270,7 @@ function main(argc,argv) {
 		}
 	}
 }
-main(argv.length,argv);
+//main(argv.length,argv);
 
 exports.brkHelp = function() {
 	execHelp();
