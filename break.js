@@ -162,7 +162,7 @@ async function brk(url,canva_path,slider_path,name_canva_file, name_out_file) {
  * @param { string } the url 
 */
 function execBrk(argument) {
-	var ls_size = parseInt(execSync("ls -l " +__dirname+"/canvas_lib | wc -l").toString());
+	var ls_size = parseInt(execSync("ls -l " +__dirname+"/canvas_lib | grep *.png | wc -l").toString());
 	const file = ""+ls_size+".png";
 	/*const path_to_file = "tests_htmls/sliders/slider.html";
 	const url = "http://localhost/"+path_to_file;*/
@@ -199,7 +199,7 @@ async function execBRK2(url,waitedtime) {
                               width:800,
                               height:700
                             }*/});
-	var ls_size = parseInt(execSync("ls -l "+__dirname+"/canvas_lib | wc -l").toString());
+	var ls_size = parseInt(execSync("ls -l "+__dirname+"/canvas_lib | grep *.png | wc -l").toString());
 	const file = ""+ls_size+".png";
 	const page = await browser.newPage();
 	loadedBrk(page,url,'#captcha__puzzle','.slider',file,"screen_"+file);
